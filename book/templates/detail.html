@@ -17,8 +17,27 @@
         <div class="content">
         <h5>{{ post.contents }}</h5>
         </div>
+        <div>
         <h5>{{ post.price }}</h5>
         <h5>{{ post.rating }}</h5>
+        {% if post.img %}
+            <img src="{{ post.img.url }}" class = "img"/>
+        {% endif %}
+    </div>
+        <div>
+        <ul>
+            {% for comment in post.comments.all %}
+            <li>{{ comment.content }}<a href = "{% url 'delete_comment' post.pk comment.pk %}">삭제하기</a></li>
+            {% endfor %}
+        <ul>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" />
+        </form>
+
         <a href="{% url 'home' %}" class="btn btn-outline-secondary" role="button" aria-pressed="true">글 목록으로 돌아가기</a>
         <a href="{% url 'edit' post.pk %}" class="btn btn-outline-secondary" role="button" aria-pressed="true">수정하기</a>
         <a href="{% url 'delete' post.pk %}" class="btn btn-outline-secondary" role="button" aria-pressed="true">글 삭제</a>
