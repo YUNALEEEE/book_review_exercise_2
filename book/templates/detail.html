@@ -1,3 +1,4 @@
+{% extends "base.html" %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,9 +8,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Document</title>
 </head>
-    {% extends "home.html" %}
+
+{% block content %}
 <body>
-    {% block content %}
+
     <div class="detail">
         <div class="detail_title">
         <h2>{{ post.title }}</h2>
@@ -27,7 +29,11 @@
         <div>
         <ul>
             {% for comment in post.comments.all %}
-            <li>{{ comment.content }}<a href = "{% url 'delete_comment' post.pk comment.pk %}">삭제하기</a></li>
+            <li>{{ comment.author }} : {{ comment.content }}
+                {% if user.is_authenticated and comment.author == user.username %}
+                <a href = "{% url 'delete_comment' post.pk comment.pk %}"><삭제></a>
+                {% endif %}
+            </li>
             {% endfor %}
         <ul>
         </div>
@@ -39,9 +45,12 @@
         </form>
 
         <a href="{% url 'home' %}" class="btn btn-outline-secondary" role="button" aria-pressed="true">글 목록으로 돌아가기</a>
-        <a href="{% url 'edit' post.pk %}" class="btn btn-outline-secondary" role="button" aria-pressed="true">수정하기</a>
-        <a href="{% url 'delete' post.pk %}" class="btn btn-outline-secondary" role="button" aria-pressed="true">글 삭제</a>
+        {% if user.is_authenticated and post.author == user.username %}
+            <a href="{% url 'edit' post.pk %}" class="btn btn-outline-secondary" role="button" aria-pressed="true">수정하기</a>
+            <a href="{% url 'delete' post.pk %}" class="btn btn-outline-secondary" role="button" aria-pressed="true">글 삭제</a>
+        {% endif %}
         </div>
-    {% endblock %}
+
 </body>
+{% endblock %}
 </html>

@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from book import views
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,5 +25,7 @@ urlpatterns = [
     path('detail/<int:post_pk>/', views.detail, name='detail'),
     path('edit/<int:post_pk>/', views.edit, name = 'edit'),
     path('delete/<int:post_pk>/', views.delete, name='delete'),
-    path('post/<int:post_pk>/<int:comment_pk>', views.comment_delete, name='delete_comment')
+    path('post/<int:post_pk>/<int:comment_pk>', views.comment_delete, name='delete_comment'),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/signup', views.signup, name='signup'),
 ]
